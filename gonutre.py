@@ -15,11 +15,11 @@ req = Request(
 
 # Get HTML text and convert meals to json object
 html = urlopen(req).read()
-soup = BeautifulSoup(html)
+soup = BeautifulSoup(html, features="html.parser")
 script = soup.find('script', type="application/json")
 data = json.loads(script.text)['props']['pageProps']['meals']
 
-# Filter data on relevant infomrationx
+# Filter data on relevant infomration
 df = pd.json_normalize(data)
 df = df[(df.type == 'lunch/dinner') & (df.hasLarge == True)]
 filtered = df[['title', 'nutritionalFactsLarge.fat', 'nutritionalFactsLarge.sodium', 'nutritionalFactsLarge.carb', 'nutritionalFactsLarge.sugar', 'nutritionalFactsLarge.protein', 'nutritionalFactsLarge.calories']][(df.type == 'lunch/dinner') & (df.hasLarge == True)] 
