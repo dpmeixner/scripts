@@ -1,3 +1,4 @@
+#!/opt/homebrew/bin/python3
 # Parse meals at gonture.com and print out nutrition information
 
 from urllib.request import Request, urlopen
@@ -7,7 +8,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 req = Request(
-    url = "https://www.gonutre.com/plans-and-menus/",
+    url = "https://www.gonutre.com/meals/?pack_size=5/",
     headers={'User-Agent': 'Mozilla/5.0'}
 )
 
@@ -17,7 +18,7 @@ req = Request(
 html = urlopen(req).read()
 soup = BeautifulSoup(html, features="html.parser")
 script = soup.find('script', type="application/json")
-data = json.loads(script.text)['props']['pageProps']['meals']
+data = json.loads(script.text)['props']['pageProps']['menu']['lunch']
 
 # Filter data on relevant infomration
 df = pd.json_normalize(data)
